@@ -23,7 +23,7 @@ text.cols = "50";
 var btn = document.createElement("BUTTON");
 btn.id = "test2";
 btn.type = "button";
-btn.textContent = "Generate\n";
+btn.textContent = "Copy Settings\n";
 btn.style= "height: 20px;margin-right: 5px;";
 btn.className = "btn-save";
 
@@ -34,7 +34,7 @@ div.appendChild(btn);
 var btn2 = document.createElement("BUTTON");
 btn2.id = "test";
 btn2.type = "button";
-btn2.textContent = "Populate\n";
+btn2.textContent = "Populate Settings\n";
 btn2.style= "height:20px;";
 btn2.className = "btn-save";
 div.appendChild(btn2);
@@ -52,15 +52,31 @@ $(document).on("click", "#test", function(event){
                 document.getElementById(array[i][j][0]).checked = array[i][j][1];
             }
             else if (i == 2) { //dropdownArray
-               // console.log(document.getElementById(array[i][j][0]));
+                // console.log(document.getElementById(array[i][j][0]));
                 document.getElementById(array[i][j][0]).selectedIndex = array[i][j][1];
             }
             else if (i == 3) { //scriptArray
-                
-               //var script = document.getElementsByClassName("tse-viewport")[0].getElementsByClassName("tse-cnt");
-               //var line = script[i].innerHTML = array[i][j];
-                  
-               
+
+                //var script = document.getElementsByClassName("tse-viewport")[0].getElementsByClassName("tse-cnt");
+                //var line = script[i].innerHTML = array[i][j];
+
+
+            }
+            else if (i == 4) { //nodeArray
+                for (j = 0; j < array[i].length; j++) {                                                       
+                                                       array[i][j]=    array[i][j].replace(/"/g,"'");
+                                                       var wrapper= document.createElement('div');
+                                                       wrapper.innerHTML=  array[i][j];
+                                                       var span= wrapper.firstChild;
+                                                       
+                                                       
+                                                       
+                                                       document.getElementsByClassName("acomp-ctn-in")[3].appendChild(span);
+                                                       //document.getElementsByClassName("acomp-ctn-in")[3].appendChild(nodeArray[0])
+                                                       
+
+
+                                                      }
             }
         }
 
@@ -74,6 +90,7 @@ $(document).on("click", "#test2", function(event){
     var selectArray = [];
     var dropdownArray = [];
     var scriptArray = [];
+    var nodeArray = [];
 
     var testName = ["NameInput", document.getElementById("NameInput").value];
     textArray.push(testName);
@@ -87,16 +104,16 @@ $(document).on("click", "#test2", function(event){
 
     //Monitor Type
     if (document.getElementById("TestTypeLabel").innerHTML != "API" && document.getElementById("TestTypeLabel").innerHTML != "WebSocket" ){
-    var monitor = -1; //var monitorArray = [];
-    var y = document.getElementById("MonitorInput");
-    var x = y.getElementsByTagName("input");
-    for (var i = 0; i < x.length; i++) {
-        if (x[i].checked == true) {
-            //monitor = x[i].value;
-            selectArray.push([x[i].id, "true"]);
-            break;
+        var monitor = -1; //var monitorArray = [];
+        var y = document.getElementById("MonitorInput");
+        var x = y.getElementsByTagName("input");
+        for (var i = 0; i < x.length; i++) {
+            if (x[i].checked == true) {
+                //monitor = x[i].value;
+                selectArray.push([x[i].id, "true"]);
+                break;
+            }
         }
-    }
     }
 
     //document.getElementById("MonitorInput").querySelectorAll( '[value="18"]');
@@ -104,14 +121,15 @@ $(document).on("click", "#test2", function(event){
     //Additional monitor
     //var additionalArray = [];
     if (document.getElementById("TestTypeLabel").innerHTML != "Trace Route"){
-    var additional = document.getElementById("AdditionalMonitorInput").selectedIndex;
-    var additionalType = document.getElementById("AdditionalMonitorInputProtocol").selectedIndex;
-    dropdownArray.push(["AdditionalMonitorInput", additional]);
-    dropdownArray.push(["AdditionalMonitorInputProtocol", additionalType]);
+        var additional = document.getElementById("AdditionalMonitorInput").selectedIndex;
+        var additionalType = document.getElementById("AdditionalMonitorInputProtocol").selectedIndex;
+        dropdownArray.push(["AdditionalMonitorInput", additional]);
+        dropdownArray.push(["AdditionalMonitorInputProtocol", additionalType]);
     }
     //Script
 
     if (document.getElementById("TestTypeLabel").innerHTML == "HTML Code") {
+
 
     } else if (document.getElementById("TestTypeLabel").innerHTML == "Transaction" || document.getElementById("TestTypeLabel").innerHTML == "WebSocket" || document.getElementById("TestTypeLabel").innerHTML == "API") {
         var command = "";
@@ -124,14 +142,21 @@ $(document).on("click", "#test2", function(event){
             }
             scriptArray.push(command);
         }
-        
+
     }
     else {
         var url = document.getElementById("TestUrlInput");
         textArray.push(["TestUrlInput", url.value]);
 
     }
-
+    //Nodes
+    if (document.getElementById("ScheduleUtilizeSpecificSettings").checked == true){
+        var nodeValue = document.getElementsByClassName("acomp-block");
+        for( var i = 0; i < nodeValue.length; i++){
+            nodeArray.push(nodeValue[i].outerHTML);
+            //document.getElementsByClassName("acomp-ctn-in")[3].appendChild(nodeArray[0])
+        }    
+    }
     //Advanced Settings
     //var optionsArray = [];
     var advancedOptions = document.getElementsByClassName("adv-settings")[0].getElementsByTagName("input");
@@ -149,7 +174,7 @@ $(document).on("click", "#test2", function(event){
         dropdownArray.push([dropDownOptions[i].id, value]);
     }
 
-    bigArray.push(textArray,selectArray,dropdownArray,scriptArray);
+    bigArray.push(textArray,selectArray,dropdownArray,scriptArray,nodeArray);
 
     document.getElementById("text").value = JSON.stringify(bigArray);
 });

@@ -9,22 +9,26 @@
 // ==/UserScript==
 
 // === START CREATE BUTTON ON THE PAGE START ===
+//Created by Andrew Smirnov
 var div = document.createElement("div");
 div.id = "divid";
-div.style= "margin-top: 30px; border-style:none;";
+div.style= "padding: 0px; margin-top: 10px; width: auto; border-style: solid; position: relative; left: 0px;";
 div.className = "pc-main-cont";
 
 
 var text = document.createElement("textarea");
 text.id = "text";
 text.rows = "40";
-text.cols = "50";
+text.cols = "45";
+//div.style= "width: 100px;";
+div.style= "padding: 10px; width: auto; position: relative; left: 0px;border-style: solid; border-width: thin;";
+//div.className = "textarea";
 
 var btn = document.createElement("BUTTON");
 btn.id = "test2";
 btn.type = "button";
-btn.textContent = "Copy Settings\n";
-btn.style= "height: 20px;margin-right: 5px;";
+btn.textContent = "Generate\n";
+btn.style= "color: #009E0D; height: 20px;margin-right: 5px; margin-bottom: 10px;";
 btn.className = "btn-save";
 
 $('.pc-main-cont').append(div);
